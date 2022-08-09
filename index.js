@@ -24,6 +24,7 @@ app.use((req, res, next) => {
   });
 
 app.post('/users', async (req, res) => {
+    console.log('get users');
     await User.create(req.body)
     res.send('User is inserted');
 })
