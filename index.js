@@ -1,12 +1,27 @@
 const express = require('express');
 const sequelize = require('./database');
 const User = require('./User');
+const cors = require('cors');
 
 sequelize.sync().then(() => console.log('db is ready'));
 
 const app = express();
 
 app.use(express.json());
+
+app.use(cors())
+
+app.use((req, res, next) => {
+    console.log('at origin', req);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  
+    next();
+  });
 
 app.post('/users', async (req, res) => {
     await User.create(req.body)
